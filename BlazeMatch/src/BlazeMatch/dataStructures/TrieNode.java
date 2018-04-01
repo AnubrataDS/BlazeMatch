@@ -1,14 +1,17 @@
 package BlazeMatch.dataStructures;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 public class TrieNode {
 	private HashMap<Character,TrieNode> map ;
-	private boolean isEnd ;
+	private int isEnd ;
 	public TrieNode()
 	{
 		map = new HashMap<>();
-		isEnd = false ;
+		isEnd = -1 ;
 	}
 	public void add(char ch)
 	{
@@ -21,12 +24,20 @@ public class TrieNode {
 	{
 		return map.get(ch);
 	}
-	public void end()
+	public Collection<TrieNode> getChildren()
 	{
-		this.isEnd = true ;
+		return map.values();
 	}
-	public boolean isEnd()
+	public void end(int x)
+	{
+		this.isEnd = x ;
+	}
+	public int isEnd()
 	{
 		return this.isEnd;
+	}
+	public boolean containsKey(char key)
+	{
+		return map.containsKey(key);
 	}
 }

@@ -1,13 +1,24 @@
 package BlazeMatch.dataStructures;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class TrieUtil {
 
+	private int ctr ;
 	private TrieNode trieRoot ;
+	private ArrayList<String> tokens ;
+	private HashMap<String, HashSet<Integer>> matches;
 	public TrieUtil()
 	{
 		trieRoot = new TrieNode();
+		tokens = new ArrayList<>();
+		ctr = 0 ;
+		matches  = new HashMap<>() ;
 	}
 	public void addAll(Collection<String> dictionary) {
 		for(String str : dictionary)
@@ -18,6 +29,8 @@ public class TrieUtil {
 	}
 
 	public void add(String newString) {
+		tokens.add(newString);
+		matches.put(newString,new HashSet<Integer>());
 		int l = newString.length();
 		TrieNode node = trieRoot ;
 		for(int i = 0 ; i<l ; i++)
@@ -29,7 +42,35 @@ public class TrieUtil {
 				node = node.getChild(ch);
 			}
 		}
-		node.end();
+		node.end(ctr++);
+	}
+	public HashMap<String, HashSet<Integer>> search(String str) {
+		HashMap<String, HashSet<Integer>> match = new HashMap<>();
+		match.putAll(matches);
+		ArrayList<TrieNode> nodes = new ArrayList<>();
+		nodes.addAll(trieRoot.getChildren());
+		int l = str.length();
+		for(int i = 0 ; i<l ; i++)
+		{
+			char ch = str.charAt(i);
+			for(TrieNode t : nodes)
+			{
+				if(t.containsKey(ch))
+				{
+					if(t.isEnd()>-1)
+					{
+						String matched = tokens.get(t.isEnd());
+						HashSet<Integer> tmp = match.get(matched);
+						tmp.add(i-matched.length()+1);
+						match.put(matched, tmp);
+					}
+					nodes.remove(t);
+					nodes.addAll(t.getChildren());
+				}
+			}
+		}
+		
+		return matches ;
 	}
 
 }
