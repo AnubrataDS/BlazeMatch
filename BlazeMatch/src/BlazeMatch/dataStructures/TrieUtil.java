@@ -37,40 +37,48 @@ public class TrieUtil {
 		{
 			char ch = newString.charAt(i);
 			node.add(ch);
-			if(i!=(l-1))
-			{
-				node = node.getChild(ch);
-			}
+			node = node.getChild(ch);
 		}
+		//System.out.println(newString+" : "+ctr );
 		node.end(ctr++);
 	}
 	public HashMap<String, HashSet<Integer>> search(String str) {
 		HashMap<String, HashSet<Integer>> match = new HashMap<>();
 		match.putAll(matches);
 		ArrayList<TrieNode> nodes = new ArrayList<>();
-		nodes.addAll(trieRoot.getChildren());
+		nodes.add(trieRoot);
 		int l = str.length();
 		for(int i = 0 ; i<l ; i++)
 		{
+			ArrayList<TrieNode> nodes2 = new ArrayList<>();
+			nodes2.add(trieRoot);
 			char ch = str.charAt(i);
 			for(TrieNode t : nodes)
 			{
 				if(t.containsKey(ch))
 				{
-					if(t.isEnd()>-1)
+					if(t.getChild(ch).isEnd()>-1)
 					{
-						String matched = tokens.get(t.isEnd());
+						String matched = tokens.get(t.getChild(ch).isEnd());
 						HashSet<Integer> tmp = match.get(matched);
 						tmp.add(i-matched.length()+1);
 						match.put(matched, tmp);
+						nodes2.addAll(t.getChildren());
 					}
-					nodes.remove(t);
-					nodes.addAll(t.getChildren());
+					//nodes.remove(t);
+					else
+					{
+						nodes2.addAll(t.getChildren());
+					}
 				}
 			}
+			nodes = nodes2 ;
 		}
 		
 		return matches ;
 	}
-
+	public ArrayList<String> getTokens()
+	{
+		return tokens ;
+	}
 }

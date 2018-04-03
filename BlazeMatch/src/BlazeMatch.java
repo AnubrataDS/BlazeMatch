@@ -2,10 +2,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Queue;
 
-import BlazeMatch.dataStructures.TrieNode;
 import BlazeMatch.dataStructures.TrieUtil;
 
 public class BlazeMatch {
@@ -32,5 +29,10 @@ public class BlazeMatch {
 	public HashMap<String,HashSet<Integer>> search(String str)
 	{
 		return dictionary.search(str);
+	}
+	
+	protected ArrayList<String> getTokens()
+	{
+		return dictionary.getTokens();
 	}
 }

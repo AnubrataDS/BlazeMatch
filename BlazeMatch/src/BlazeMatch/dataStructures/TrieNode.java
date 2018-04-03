@@ -18,6 +18,8 @@ public class TrieNode {
 		if(!map.containsKey(ch))
 		{
 			map.put(ch, new TrieNode());
+
+			//System.out.println("added  : "+ch);
 		}
 	}
 	public TrieNode getChild(char ch)
